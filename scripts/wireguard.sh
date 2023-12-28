@@ -8,11 +8,11 @@ if [[ -z "${IP_WG_ENV}" ]]; then
 fi
 
 # Setup boringtun interface and start
-if [[ -f /data/boringtun ]]; then
-    printf "Starting Wireguard userspace (boringtun)\n";
+if [[ -f /data/wireguard-go ]]; then
+    printf "Starting Wireguard userspace (wireguard-go)\n";
     mkdir -p /dev/net;
     mknod /dev/net/tun c 10 200;
-    /data/boringtun -f wg0 & # Sends logs to STDOUT
+    /data/wireguard-go -f wg0 & # Sends logs to STDOUT
     wireguard_pid=$!;
 else
     printf "WARNING: Wireguard binary not found. This container will not run\n";
@@ -52,6 +52,10 @@ fi
 
 # This brings up the wireguard interface inside the container
 printf "Bringing interface up... $(ip link set wg0 up)${nl}";
+
+# disable qdisc
+printf "${nl}Current qdisc:\n$(tc -s qdisc show dev wg0)";
+printf "${nl}Set noqueue:\n$(tc qdisc replace dev wg0 root noqueue)";
 
 # Display the running configs
 printf "${nl}Active network interfaces:\n$(ip addr 2>&1)";
