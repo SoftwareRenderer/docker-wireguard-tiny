@@ -1,15 +1,17 @@
 FROM alpine:latest as build
 
 RUN \
- echo "***** install cargo ****" && \
- apk add cargo && \
+ echo "***** install go ****" && \
+ apk add go git make && \
  echo "***** install boringtun via cargo ****" && \
- cargo install boringtun-cli 
+ git clone https://git.zx2c4.com/wireguard-go
+WORKDIR /wireguard-go
+RUN make
 
 FROM alpine:latest
 
 # add local files
-COPY --from=build /root/.cargo/bin/boringtun-cli /data/boringtun
+COPY --from=build /wireguard-go/wireguard-go /data/wireguard-go
 COPY scripts/healthcheck.sh /data/healthcheck.sh
 COPY scripts/wireguard.sh /data/wireguard.sh
 
