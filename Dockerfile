@@ -3,7 +3,7 @@ FROM alpine:latest as build
 RUN \
  echo "***** install go ****" && \
  apk add go git make && \
- echo "***** install boringtun via cargo ****" && \
+ echo "***** install wireguard-go from an official repository (https://www.wireguard.com/repositories/) ****" && \
  git clone https://git.zx2c4.com/wireguard-go
 WORKDIR /wireguard-go
 RUN make

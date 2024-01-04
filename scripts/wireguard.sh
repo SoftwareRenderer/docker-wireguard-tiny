@@ -7,7 +7,7 @@ if [[ -z "${IP_WG_ENV}" ]]; then
     IP_WG_ENV=10.0.0.0/24;
 fi
 
-# Setup boringtun interface and start
+# Setup wireguard interface and start
 if [[ -f /data/wireguard-go ]]; then
     printf "Starting Wireguard userspace (wireguard-go)\n";
     mkdir -p /dev/net;
@@ -64,7 +64,7 @@ printf "${nl}iptables-legacy ipv4 config:\n$(iptables-legacy -t nat -L)";
 printf "${nl}Active Wireguard config:\n$(wg show wg0 2>&1)";
 
 # Test ping to Google for connectivity validation
-printf "${nl}IPv4 connectivity validation:\n" && /bin/ping -4 -q -c 1 ipv4.google.com;
+#printf "${nl}IPv4 connectivity validation:\n" && /bin/ping -4 -q -c 1 ipv4.google.com;
 printf "${nl}Running....\n"
 
 wait -n;
