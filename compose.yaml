@@ -1,0 +1,12 @@
+version: '3.9'
+services:
+    wireguard:
+        build: /volume1/docker/wireguard
+        cap_add:
+            - NET_ADMIN
+        environment:
+            - IP_WG_ENV=10.0.0.2/24
+        volumes:
+            - '/volume1/docker/wireguard/:/config'
+        network_mode: host
+        restart: always
